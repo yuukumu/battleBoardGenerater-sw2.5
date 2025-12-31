@@ -31,6 +31,7 @@ heightBox.value = 400;
 
 // 線の太さ
 const lineThickBox = document.getElementById('lineThickBox');
-lineThickBox.value = 3;
+lineThickBox.value = 4;
+
 
 
