@@ -1,0 +1,58 @@
+canvas {
+    background-color: black;
+}
+
+#options {
+    background-color: #202020;
+    border-bottom: 3px solid darkgray;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: -7px;
+    padding: 4px;
+    border-top: 3px solid darkgrey;
+    border-bottom: 3px solid darkgray;
+}
+
+ul {
+    padding-bottom: 5px;
+}
+
+li {
+    padding: 3px;
+}
+
+/* 背景色のテンプレート */
+.blackB {
+    background-color: black;
+    color: snow;
+}
+.whiteB {
+    background-color: white;
+    color: black;
+}
+.yellowB {
+    background-color: #ffff00;
+    color: black;
+}
+.redB {
+    background-color: #ff0000;
+    color: white;
+}
+.orangeB {
+    background-color: #ee7800;
+    color: white;
+}
+.darkblueB {
+    background-color: #00008b;
+    color: white;
+}
+.darkgreenB {
+    background-color: #006400;
+    color: white;
+}
+.darkbrownB {
+    background-color: #3e2e28;
+    color: white;
+}
