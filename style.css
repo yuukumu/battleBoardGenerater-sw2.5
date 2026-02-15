@@ -1,5 +1,11 @@
+body {
+    background-color: black;
+    color: snow;
+}
+
 canvas {
     background-color: black;
+    border: 1px solid #f3f3f3;;
 }
 
 #options {
@@ -24,35 +30,35 @@ li {
 }
 
 /* 背景色のテンプレート */
-.blackB {
+.blackButton {
     background-color: black;
     color: snow;
 }
-.whiteB {
+.whiteButton {
     background-color: white;
     color: black;
 }
-.yellowB {
+.yellowButton {
     background-color: #ffff00;
     color: black;
 }
-.redB {
+.redButton {
     background-color: #ff0000;
     color: white;
 }
-.orangeB {
+.orangeButton {
     background-color: #ee7800;
     color: white;
 }
-.darkblueB {
+.darkblueButton {
     background-color: #00008b;
     color: white;
 }
-.darkgreenB {
+.darkgreenButton {
     background-color: #006400;
     color: white;
 }
-.darkbrownB {
+.darkbrownButton {
     background-color: #3e2e28;
     color: white;
 }

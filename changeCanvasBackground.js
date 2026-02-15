@@ -3,8 +3,9 @@ function changeCanvasColor(newColor) {
     canvas.style.backgroundColor = newColor;
 }
 
-// キャンバスの背景を画像にする
+// 背景画像選択
 
 
-// 画像を削除してもとの透過画像をDLできるようにする
+// 背景画像撤去
+
 
