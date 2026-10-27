@@ -8,52 +8,80 @@
 </head>
 
 <body>
-    <h1>上級戦闘定規作成</h1>
-    <p>いくつかのオプションを決めて「上記の設定で作成」を押すと、上級戦闘に使える数字と線の目盛りの透過画像を作成できます。</p>
+    <h1>SW2.5上級戦闘定規作成</h1>
+    <p>いくつかのオプションを決めて、上級戦闘に使える数字と線の目盛りの透過画像を作成できます。</p>
     <p>完成したらプレビューの画像を右クリックして「名前を付けて画像を保存」してください。</p>
-    <p><a href="https://note.com/yuukumu/n/nf5959c682ac1?sub_rt=share_sb">詳しい説明はこちら(別ページへのリンク)</a></p>
+    <p><a href="https://note.com/yuukumu/n/nf5959c682ac1?sub_rt=share_sb">詳しい説明はこちら(noteへのリンク)</a></p>
     <div id="options">
         <h2>基本設定</h2>
         <ul>
             <li>
-                長さは<input type="number" id="boardMeterBox" value="15" min="1" max="200" step="1" />メートル、
-                数字は<input type="number" id="startNumberBox" value="0" min="0" max="200" step="1" />から開始
+                長さは<input class="num-box" id="boardMeterBox" data-param="boardMeter" type="number" value="" min="1" max="200" step="1" />メートル、
+                数字は<input class="num-box" id="startNumberBox" data-param="startNumber" type="number" value="" min="0" max="200" step="1" />から開始
+            </li>
+            <li>
+                <label for="numPositionSelect">数字の位置:</label>
+                <select name="num-position" id="numPositionSelect">
+                    <option value="up" selected>上</option>
+                    <option value="down">下</option>
+                    <option value="center">中央</option>
+                </select>
+            </li>
+            <li>
+                線と線の間隔<input class="num-box" id="spacingBox" data-param="spacing" type="number" value="" min="30" max="200" step="1" />
+            </li>
+            <li>
+                ボードの縦幅<input class="num-box" id="heightBox" data-param="height" type="number" value="" min="50" max="5000" step="1" />
+            </li>
+            <li>
+                線の太さ<input class="num-box" id="lineThickBox" data-param="lineThickness" type="number" value="" min="1" max="20" step="1" />
             </li>
             <li id="chooseLineBasicColor">
-                線の基本色<input type="color" id="lineBasicColorPicker"
-                    value="#ffffff">←これをクリックして色を選択、もしくはボタンから選ぶ→<!-- createButtonElement.jsでボタンが生成される -->
+                線の基本色<input class="color-picker" data-target="lineBasicColor" type="color">
+                ←これをクリックして色を選択、もしくはボタンから選ぶ→<!-- ここにcreateButtonElement.jsでボタンが生成される -->
             </li>
             <li id="chooseTextBasicColor">
-                数字の基本色<input type="color" id="textBasicColorPicker"
-                    value="#ffffff">←これをクリックして色を選択、もしくはボタンから選ぶ→<!-- createButtonElement.jsでボタンが生成される -->
+                数字の基本色<input class="color-picker" data-target="textBasicColor" type="color">
+                ←これをクリックして色を選択、もしくはボタンから選ぶ→<!-- ここにcreateButtonElement.jsでボタンが生成される -->
             </li>
+            
             <li>
-                線と線の間隔<input type="number" id="spacingBox" value="48" min="30" max="200" step="1" />
-            </li>
-            <li>
-                ボードの縦幅<input type="number" id="heightBox" value="400" min="50" max="5000" step="1" />
-            </li>
-            <li>
-                線の太さ<input type="number" id="lineThickBox" value="3" min="1" max="20" step="1" />
-            </li>
-            <li>
-                <label><input type="checkbox" id="strokeCheckBox" name="UseStroke" checked>数字の縁取り(不要ならチェックを外す)</label>
-                <div id="strokeColorContainer">
+                <input class="toggle-container" id="textStrokeCheckBox" data-target="textStrokeContainer" type="checkbox" checked>
+                <label for="textStrokeCheckBox">数字の縁取り(不要ならチェックを外す)</label>
+                <div id="textStrokeContainer">
                     <ul>
                         <li id="chooseTextStrokeColor">
-                            縁取りの色<input type="color" id="textStrokeColorPicker" value="#ee7800">
+                            縁取りの色<input class="color-picker" data-target="textStrokeColor" type="color">
+                            <!-- ここにcreateButtonElement.jsでボタンが生成される -->
                         </li>
                         <li>
-                            縁取りの太さ<input type="number" id="textStrokeWidthBox" value="3" min="1" max="20" step="1" />
+                            縁取りの太さ<input class="num-box" id="textStrokeWidthBox" data-param="textStrokeWidth" type="number" value="" min="1" max="20" step="1" />
                         </li>
                     </ul>
                 </div>
             </li>
+
+
+            <li>
+                <input class="toggle-container" id="lineStrokeCheckBox" data-target="lineStrokeContainer" type="checkbox">
+                <label for="lineStrokeCheckBox">線の縁取り(不要ならチェックを外す)</label>
+                <div id="lineStrokeContainer" style="display:none;">
+                    <ul>
+                        <li id="chooseLineStrokeColor">
+                            縁取りの色<input class="color-picker" data-target="lineStrokeColor" type="color">
+                            <!-- ここにcreateButtonElement.jsでボタンが生成される -->
+                        </li>
+                        <li>
+                            縁取りの太さ<input class="num-box" id="lineStrokeWidthBox" data-param="lineStrokeWidth" type="number" value="" min="1" max="20" step="1" />
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
         </ul>
     </div>
 
-    <p><input type="button" value="上記の設定で作成" onclick="updateCanvas()"></p>
-    <p>キャンバスの背景(保存できる透過画像には関係ない。プレビュー用。)
+    <p>キャンバスの背景色(プレビュー用、保存できる透過画像には関係ない)⇒
         <input type="button" value="黒" onclick="changeCanvasColor('black')">
         <input type="button" value="白" onclick="changeCanvasColor('white')">
         <input type="button" value="緑" onclick="changeCanvasColor('green')">

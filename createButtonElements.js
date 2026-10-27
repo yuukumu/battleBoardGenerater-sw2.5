@@ -1,17 +1,17 @@
 // ボタン設定データのオブジェクトの配列
 const colorDefinitions = [
-  { label: "黒", className: "blackButton",  colorCode: "#000000" },
-  { label: "白", className: "whiteButton",  colorCode: "#ffffff" },
-  { label: "黄", className: "yellowButton", colorCode: "#ffff00" },
-  { label: "赤", className: "redButton",    colorCode: "#ff0000" },
-  { label: "橙", className: "orangeButton", colorCode: "#ee7800" },
-  { label: "濃い茶", className: "darkbrownButton", colorCode: "#3e2e28" },
-  { label: "暗い青", className: "darkblueButton",  colorCode: "#00008b" },
-  { label: "暗い緑", className: "darkgreenButton", colorCode: "#006400" },
+  { colorCode: "#000000", text: "黒",     textColor: "snow"  },
+  { colorCode: "#ffffff", text: "白",     textColor: "black" },
+  { colorCode: "#ff0000", text: "赤",     textColor: "white" },
+  { colorCode: "#ee7800", text: "橙",     textColor: "white" },
+  { colorCode: "#ffff00", text: "黄",     textColor: "black" },
+  { colorCode: "#006400", text: "暗い緑", textColor: "white" },
+  { colorCode: "#00008b", text: "暗い青", textColor: "white" },
+  { colorCode: "#3e2e28", text: "濃い茶", textColor: "white" },
 ];
 
 
-// ボタン生成
+
 /**
  * ボタンを生成して指定の要素に追加する関数
  * @param {Array}  dataList 色データの配列
@@ -21,37 +21,34 @@ const colorDefinitions = [
 function generateColorButtons(dataList, containerId, targetType) {
   // 親要素を取得
   const container = document.getElementById(containerId);
-  
-  // 親要素が見つからない場合は処理を中断（エラー防止）
+
+  // 親要素が見つからない場合は処理を中断
   if (!container) return;
 
-  // データの数だけループしてボタンを作る
   dataList.forEach(item => {
-    // <input> 要素を作成
-    const button = document.createElement("input");
-    
-    // 属性をセット
-    button.type = "button";
-    button.value = item.label;           // ボタンの文字
-    button.className = item.className;   // クラス名
-    
-    // data属性をセット
-    button.dataset.target = targetType;      // data-target
-    button.dataset.colorCode = item.colorCode; // data-color-code
-    
-    // クリックイベントを設定 onclick="updateColorPicker(this)" となるように。
-    button.setAttribute("onclick", "updateColorPicker(this)");
+    const button = document.createElement("button");
 
-    // 親要素に追加
+    button.type = "button";
+    button.className = "color-btn";
+
+    button.textContent = item.text; // ボタンの文字
+    button.style.color = item.textColor; // ボタンの文字色
+    button.style.backgroundColor = item.colorCode; // ボタンの色
+
+    // data属性
+    button.dataset.target = targetType;
+    button.dataset.colorCode = item.colorCode;
+
     container.appendChild(button);
   });
 }
 
 // 線の色用ボタンを生成
-generateColorButtons(colorDefinitions, "chooseLineBasicColor", "line");
+generateColorButtons(colorDefinitions, "chooseLineBasicColor", "lineBasicColor");
+// 線の縁取りの色用ボタンを生成
+generateColorButtons(colorDefinitions, "chooseLineStrokeColor", "lineStrokeColor")
 
 // 文字の色用ボタンを生成
-generateColorButtons(colorDefinitions, "chooseTextBasicColor", "text");
-
+generateColorButtons(colorDefinitions, "chooseTextBasicColor", "textBasicColor");
 // 文字の縁取りの色用ボタンを生成
-generateColorButtons(colorDefinitions, "chooseTextStrokeColor", "textStroke")
+generateColorButtons(colorDefinitions, "chooseTextStrokeColor", "textStrokeColor")

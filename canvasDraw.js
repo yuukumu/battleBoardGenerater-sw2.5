@@ -1,100 +1,148 @@
-// キャンバス
 const canvas = document.getElementById('boardCanvas');
 const ctx = canvas.getContext('2d');
 
-// 縦線の描画
-/**
- * 線をキャンバスに描画する関数
- * @param {String} color  描画する線のカラーコード 
- * @param {Number} thickness 線の太さ(横幅)
- * @param {Number} height 線の長さ
- * @param {Number} meter  メートル単位でのボードの長さ。これによって線の個数が決まる。
- * @param {Number} spacing  線と線の間隔
- */
-function drawLine(color, thickness, height, meter, spacing) {
-    ctx.strokeStyle = color;
-    ctx.lineWidth = thickness;
-    for (let i = 0; i <= meter; i++) {
-        const LineStartX = i * spacing + 6; // それぞれの線のスタート地点のx座標。+6はボードの余白のため。
-        ctx.beginPath(); // パスの開始 
-        ctx.moveTo(LineStartX, 0); // 開始点 (x, y)
-        ctx.lineTo(LineStartX, height); // 終了点 (x, y)
-        ctx.stroke(); // 線を描画
-    }
+
+function drawLine(x, y) {
+    ctx.beginPath(); // パスの開始 
+    ctx.moveTo(x, 0); // 開始点
+    ctx.lineTo(x, y); // 終了点
+    ctx.stroke(); // 線を描画
 }
 
-
-// 数字の描画
-/**
- * 数字を文字としてキャンバスに描画する関数
- * @param {String} color 描画する数字のカラーコード
- * @param {Number} meter メートル単位でのボードの長さ。これによって数字の個数が決まる。
- * @param {Number} startNumber 開始番号。左端の数字。
- * @param {Number} spacing 「線と線の間隔」の値。線の間隔に合わせて数字を入れる場所も変わる。
- * @param {Boolean} stroke 文字を縁取りするかどうか
- * @param {Number} strokeWidth 縁取り文字の線の太さ
- * @param {Number} strokeColor 縁取りの色
- */
-function drawText(basicColor, meter, startNumber, spacing, stroke, strokeWidth, strokeColor) {
-    // テキスト共通設定
-    ctx.font = 'bold 24px Arial';
-    ctx.fillStyle = basicColor;
-    ctx.textAlign = 'center'; // 指定したX座標が文字の中央になるように文字を描画
-
-    // 縁取りをする場合、その設定
+function drawText(text, x, y, stroke) {
     if (stroke) {
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = strokeWidth;
+        ctx.strokeText(text, x, y);
     }
 
-    // 描画
-    // 縁取り文字を描画して、その上に塗りつぶしてある文字を乗せる。
-    // 塗りつぶし文字の描画を消せば、塗りつぶしなしの「縁のみ文字」にもできる拡張性あり。
-    const textY = 30; // y座標
-    for (let i = 0; i < meter; i++) {
-        x = (i + 1 / 2) * spacing + 6; // x座標
-        number = String(i + startNumber); // 文字として描画する数字
-
-        // 縁取りをする場合、縁取り文字(線のみの文字)描画
-        if (stroke) {
-            ctx.strokeText(number, x, textY);
-        }
-        
-        // 塗りつぶし文字
-        ctx.fillText(number, x, textY);
-    }
+    ctx.fillText(text, x, y);
 }
 
 
-// キャンバスの更新
-function updateCanvas() {
-    // 色選択ボックスから設定を取得
-    const lineColor = lineBasicColorPicker.value;
-    const textColor = textBasicColorPicker.value;
-    const textStrokeColor = textStrokeColorPicker.value;
+function draw() {
 
-    // 数値ボックスから設定を取得
-    const lineThickness = parseInt(lineThickBox.value, 10);
-    const lineHeight = parseInt(heightBox.value, 10);
-    const boardMeter = parseInt(boardMeterBox.value, 10);
-    const startNumber = parseInt(startNumberBox.value, 10);
-    const spacing = parseInt(spacingBox.value, 10);
-    const textStrokeWidth = parseInt(textStrokeWidthBox.value, 10);
+    const meter = numbers.boardMeter;
+    const height = numbers.height;
+    const spacing = numbers.spacing;
+
+    // キャンバスをととのえる
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = meter * spacing + 12; // +12は両端の線が見切れないようにするため
+    canvas.height = height;
+    ctx.translate(6, 0); // キャンバスの描画範囲をx方向に6ずらす
 
     // チェックボックスの状態を取得
-    const textStroke = strokeCheckBox.checked;
+    const useTextStroke = document.getElementById('textStrokeCheckBox').checked;
+    const useLineStroke = document.getElementById('lineStrokeCheckBox').checked;
 
-    // キャンバス内のすべての要素を削除
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // 描画する要素に合わせてキャンバスのリサイズ(横方向の余白12px)
-    canvas.width = boardMeter * spacing + 12;
-    canvas.height = lineHeight;
 
-    // 要素を生成
-    drawLine(lineColor, lineThickness, lineHeight, boardMeter, spacing) // 縦線の描画
-    drawText(textColor, boardMeter, startNumber, spacing, textStroke, textStrokeWidth, textStrokeColor) // 数字の描画
+
+    // ボードの長さ(メートル)に従ってループし、要素を生成
+
+    // 区切り線
+    /* 
+    - 縁取りあり
+        縁取りに使いたい色で先に太い線を描画し、次に普通の線を描画
+    - 縁取りなし
+        普通の線を描画するだけ
+    */
+    if (useLineStroke) {
+
+        ctx.strokeStyle = colors.lineStrokeColor;
+        ctx.lineWidth = Number(numbers.lineThickness) + Number(numbers.lineStrokeWidth);
+        for (let i = 0; i <= meter; i++) {
+            drawLine(i * spacing, height);
+        }
+
+        ctx.strokeStyle = colors.lineBasicColor;
+        ctx.lineWidth = numbers.lineThickness;
+        for (let i = 0; i <= meter; i++) {
+            drawLine(i * spacing, height);
+        }
+
+    } else {
+
+        ctx.strokeStyle = colors.lineBasicColor;
+        ctx.lineWidth = numbers.lineThickness;
+        for (let i = 0; i <= meter; i++) {
+            drawLine(i * spacing, height);
+        }
+
+    }
+
+
+
+    // 数字
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center'; // 指定したX座標が文字の中央になるように文字を描画
+    ctx.fillStyle = colors.textBasicColor;
+
+    // 数字の位置
+    let textY;
+    switch (document.getElementById('numPositionSelect').value) {
+        case "up":
+            textY = 30;
+            break;
+
+        case "down":
+            textY = height - 15;
+            break;
+
+        case "center":
+            textY = height / 2;
+            break;
+    }
+
+    // 縁取り、塗りつぶしにより読み込むものを変える
+    // if文を取り払って全部読み込む形でも動く
+    if (useTextStroke) {
+        ctx.strokeStyle = colors.textStrokeColor;
+        ctx.lineWidth = numbers.textStrokeWidth;
+    }
+
+    for (let i = 0, startNumber = numbers.startNumber; i < meter; i++, startNumber++) {
+        drawText(
+            String(startNumber),
+            (i + 0.5) * spacing,
+            textY,
+            useTextStroke
+        );
+    }
 }
 
-updateCanvas();
 
+
+
+// 設定欄の全体を覆うid="options"のdiv要素内での変更に対応して動かすようにする
+// drawの実行回数が無駄に増えないようにrequestDraw()を使う
+
+const options = document.getElementById('options');
+
+let drawScheduled = false;
+
+function requestDraw() {
+
+    if (drawScheduled) {
+        return;
+    }
+
+    drawScheduled = true;
+
+    requestAnimationFrame(() => {
+        draw();
+        drawScheduled = false;
+    });
+}
+
+options.addEventListener('input', requestDraw);
+options.addEventListener('change', requestDraw);
+// class="color-btn"ボタンに限りクリックでも動かす
+options.addEventListener('click', event => {
+    if (event.target.closest('.color-btn')) {
+        requestDraw();
+    }
+});
+
+
+// 初回
+draw()
 
